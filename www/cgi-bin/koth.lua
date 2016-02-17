@@ -69,7 +69,7 @@ function koth.award_points(team, category, points, comment)
 	if (f) then
 		f:close()
 	else
-		return false, "No such team"
+		return false, "No such registered team.  Have you registered?"
 	end
 	
 	local ok = koth.anchored_search(koth.path("state/points.log"), entry, " ")
