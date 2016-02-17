@@ -6,6 +6,22 @@ local koth = require "koth"
 
 local max_by_cat = {}
 
+-- pairsByKeys http://www.lua.org/pil/19.3.html
+function pairsByKeys (t, f)
+        local a = {}
+        for n in pairs(t) do table.insert(a, n) end
+        table.sort(a, f)
+        local i = 0      -- iterator variable
+        local iter = function ()   -- iterator function
+                i = i + 1
+                if a[i] == nil then return nil
+                else return a[i], t[a[i]]
+                end
+        end
+        return iter
+end
+-- end pairsByKeys
+
 local f = io.popen("ls " .. koth.path("packages"))
 for cat in f:lines() do
 	max_by_cat[cat] = 0
@@ -24,7 +40,7 @@ for line in io.lines(koth.path("state/points.log")) do
 end
 
 local body = "<dl>\n"
-for cat, biggest in pairs(max_by_cat) do
+for cat, biggest in pairsByKeys(max_by_cat) do
 	local points, dirname
 
 	body = body .. "<dt>" .. cat .. "</dt>"
